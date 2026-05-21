@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<!--
+        parent: Spring Boot's parent POM manages ALL dependency versions for us.
+        We never need to manually specify versions for Spring libraries.
+        Equivalent of having a curated package.json with exact working versions.
+    -->
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.2.5</version>
+		<relativePath/>
+	</parent>
+
+	<!-- Your project's identity - like "name" and "version" in package.json -->
+	<groupId>com.legalintake</groupId>
+	<artifactId>legal-intake-backend</artifactId>
+	<version>1.0.0</version>
+	<name>legal-intake-backend</name>
+	<description>Legal Intake Case Management System - Spring Boot Backend</description>
+
+	<properties>
+		<java.version>21</java.version>
+		<!-- JWT library version - we specify this because it's NOT a Spring library -->
+		<jjwt.version>0.12.5</jjwt.version>
+	</properties>
+
+	<dependencies>
+
+		<!-- ===== CORE WEB (replaces Fastify) =====
+             Brings in: embedded Tomcat server, Spring MVC (@RestController, @GetMapping etc),
+             Jackson (JSON serialization/deserialization - like JSON.stringify/parse but automatic)
+        -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<!-- ===== SPRING SECURITY (replaces authMiddleware.js + rolePolicy.js) =====
+             Handles: JWT filter chain, CORS config, role-based access (@PreAuthorize)
+             This is the most important security dependency.
+        -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		<!-- ===== JPA + HIBERNATE (replaces Sequelize ORM) =====
+             JPA = Java Persistence API (the standard interface)
+             Hibernate = the actual implementation (like how Sequelize implements SQL)
+             Lets you write @Entity classes instead of Sequelize model definitions
+        -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+
+		<!-- ===== POSTGRESQL DRIVER (same database, same tables) =====
+             Just the JDBC driver so Java can talk to your existing Postgres DB.
+             Your tables don't change at all.
+        -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- ===== JWT LIBRARY (replaces @fastify/jwt) =====
+             jjwt is the standard JWT library in Java.
+             We need 3 parts: api (interfaces), impl (logic), jackson (JSON support for claims)
+        -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>${jjwt.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>${jjwt.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>${jjwt.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- ===== LOMBOK (reduces boilerplate) =====
+             Generates getters, setters, constructors, builders at compile time.
+             Instead of writing 50 lines of getters/setters for each entity,
+             you just write @Data or @Getter/@Setter on the class.
+             Interviewers love seeing this - it's standard in real Java projects.
+        -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- ===== EMAIL (replaces nodemailer) =====
+             Spring's built-in mail support. Configure SMTP in application.properties,
+             then inject JavaMailSender anywhere you need it.
+        -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+
+		<!-- ===== VALIDATION (replaces Fastify schemas like signupSchema) =====
+             Lets you put @NotBlank, @Email, @Size on DTO fields.
+             Spring automatically validates request bodies and returns 400 if invalid.
+        -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+
+		<!-- ===== AWS SECRETS MANAGER (same as your secretsManager.js) =====
+             For loading JWT_SECRET, DB_PASS etc from AWS Secrets Manager in production.
+        -->
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>secretsmanager</artifactId>
+			<version>2.25.27</version>
+		</dependency>
+
+		<!-- ===== SPRINGDOC / SWAGGER (NEW - not in Node version) =====
+             Auto-generates a Swagger UI at /swagger-ui.html
+             Interviewers are very impressed when you can show a live API docs page.
+             It reads your @RestController annotations and documents everything automatically.
+        -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.4.0</version>
+		</dependency>
+
+		<!-- ===== AOP (for Audit Trail - NEW feature) =====
+             AOP = Aspect Oriented Programming.
+             Lets you intercept method calls across the whole app without modifying those methods.
+             We'll use this to automatically log every service action to AuditLog table.
+             This is a very Java-specific, enterprise-level concept - great for interviews.
+        -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+
+		<!-- ===== GOOGLE GEMINI SDK (same as @google/generative-ai) =====
+             Official Java SDK for Gemini API - document summarization + AI chat.
+        -->
+		<dependency>
+			<groupId>com.google.cloud</groupId>
+			<artifactId>google-cloud-vertexai</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+
+		<!-- ===== APACHE PDF BOX (replaces pdf-parse) =====
+             Extracts text from PDF files for Gemini summarization.
+        -->
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox</artifactId>
+			<version>3.0.2</version>
+		</dependency>
+
+		<!-- ===== APACHE POI (replaces mammoth for .docx) =====
+             Extracts text from Word documents (.docx) for Gemini summarization.
+        -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>5.2.5</version>
+		</dependency>
+
+		<!-- ===== RAZORPAY SDK ===== -->
+		<dependency>
+			<groupId>com.razorpay</groupId>
+			<artifactId>razorpay-java</artifactId>
+			<version>1.4.5</version>
+		</dependency>
+
+		<!-- ===== TEST (comes free with Spring Boot) ===== -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- Twilio SDK for WhatsApp -->
+		<dependency>
+			<groupId>com.twilio.sdk</groupId>
+			<artifactId>twilio</artifactId>
+			<version>10.1.5</version>
+		</dependency>
+
+	</dependencies>
+
+
+	<build>
+		<plugins>
+			<!--
+                spring-boot-maven-plugin: creates a "fat JAR" - a single .jar file
+                that contains your app + ALL dependencies + an embedded Tomcat server.
+                You run it with: java -jar legal-intake-backend-1.0.0.jar
+                This is what the Dockerfile will use instead of "npm run dev"
+            -->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<!-- Exclude Lombok from the final JAR - it's only needed at compile time -->
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

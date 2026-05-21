@@ -1,0 +1,38 @@
+# Environment files
+.env
+.env.*
+
+# Sensitive Spring Boot config — NEVER push these
+**/application.properties
+**/application-*.properties
+**/application.yml
+**/application-*.yml
+
+# Node
+node_modules
+**/node_modules
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Java build artifacts
+target/
+*.jar
+*.class
+*.war
+
+# Frontend build
+dist/
+build/
+
+# Uploads
+uploads/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
