@@ -7,7 +7,7 @@
 [![Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=java)](https://www.java.com/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen?style=for-the-badge&logo=springboot)](https://spring.io/projects/spring-boot)
 [![React](https://img.shields.io/badge/React-18-blue?style=for-the-badge&logo=react)](https://reactjs.org/)
-[![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
+[![PostgresSQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.postgres.com/)
 [![Razorpay](https://img.shields.io/badge/Razorpay-Payment-02042B?style=for-the-badge&logo=razorpay)](https://razorpay.com/)
 [![Twilio](https://img.shields.io/badge/Twilio-WhatsApp-F22F46?style=for-the-badge&logo=twilio)](https://www.twilio.com/)
 
@@ -159,7 +159,7 @@
            │              │                  │
            ▼              ▼                  ▼
     ┌────────────┐  ┌──────────────┐  ┌────────────────┐
-    │   MySQL    │  │    Twilio    │  │   Razorpay     │
+    │   PGSQL    │  │    Twilio    │  │   Razorpay     │
     │  Database  │  │  (WhatsApp)  │  │   (Payments)   │
     └────────────┘  └──────────────┘  └────────────────┘
 ```
