@@ -3,18 +3,18 @@ version: "3.9"
 services:
   frontend:
     build:
-      context: ./legal-app-fixed
+      context: ./frontend
       dockerfile: Dockerfile
     ports:
       - "5173:80"
     environment:
-      - VITE_API_URL=http://13.233.254.150:3000
+      - VITE_API_URL=${VITE_API_URL}
     depends_on:
       - backend
 
   backend:
     build:
-      context: ./legal-intake-backend-spring-COMPLETE/legal-intake-backend-spring
+      context: ./backend/legal-intake-backend-spring
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
@@ -22,6 +22,10 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/legal_intake_db
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      EMAIL_USER: ${EMAIL_USER}
+      EMAIL_PASS: ${EMAIL_PASS}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
     depends_on:
       - db
 
