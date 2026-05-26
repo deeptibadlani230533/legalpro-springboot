@@ -1,6 +1,8 @@
 # Environment files
 .env
-.env.*
+.env.local
+.env.production
+!.env.example
 
 # Sensitive Spring Boot config — NEVER push these
 **/application.properties
