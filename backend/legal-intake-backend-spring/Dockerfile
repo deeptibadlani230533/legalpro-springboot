@@ -55,13 +55,7 @@ RUN mkdir -p /app/uploads
 # Copy ONLY the fat JAR from the build stage (nothing else)
 COPY --from=builder /app/target/*.jar app.jar
 
-# Port 3000 - same as Node backend so docker-compose and EC2 security groups don't change
-EXPOSE 3000
-
-# Health check (same concept as your Node /health endpoint)
-# Docker will call this every 30 seconds to check if the container is healthy
-HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-  CMD wget --quiet --tries=1 --spider http://localhost:3000/health || exit 1
+EXPOSE 10000
 
 # Run the Spring Boot fat JAR
 # java -jar app.jar = starts embedded Tomcat, connects to DB, seeds admin, starts serving
